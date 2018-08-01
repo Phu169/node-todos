@@ -1,43 +1,56 @@
-var app=angular.module("app.todos",["xeditable"]);
+var app = angular.module("app.todos", ["xeditable"]);
 
-app.controller("todoController",['$scope',function($scope){
-    
-    $scope.appName="Node Todos !!!";
-    
-    $scope.formData={};
+app.controller("todoController", ['$scope', 'svTodos', function ($scope, svTodos) {
 
-    $scope.todos=[
-        {
-            text:"Khởi tạo dự án, include thư viện bootstrap, fontawesome, angularjs,...",
-            isDone:true
-        },{
-            text:"Cài đặt Angularjs app, controller, khởi tạo dữ liệu ban đầu",
-            isDone: true
-        },{
-            text:"tạo service gọi api, binding dữ liệu, action...",
-            isDone:false
-        },{
-            text:"Hoàn thành ứng dụng, deploy lên heroku ...",
-            isDone:false
-        }
-    ];
+    $scope.appName = "Node Todos !!!";
 
-    $scope.creatTodo=function(){
-        var todo={
-            text:$scope.formData.text,
-            isDone:false
+    $scope.formData = {};
+    $scope.loading = true;    //su dung cho spinner
+
+    $scope.todos = [];
+
+    //load data from api
+    svTodos.get().success(function (data) {
+        $scope.todos = data;
+        $scope.loading = false;   //su dung cho spinner
+    });
+
+    $scope.creatTodo = function () {
+        $scope.loading = true;   //su dung cho spinner
+
+        var todo = {
+            text: $scope.formData.text,
+            isDone: false
         }
 
-        $scope.todos.push(todo);
-        $scope.formData.text="";
+        svTodos.create(todo).success(function (data) {
+            $scope.todos = data;
+            $scope.formData.text = "";
+            $scope.loading = false;   //su dung cho spinner
+        })
     }
 
-    $scope.updateTodo=function(todo){
+    $scope.updateTodo = function (todo) {
         console.log("Update Todo: ", todo);
+        $scope.loading = true;   //su dung cho spinner
+
+        svTodos.update(todo)
+            .success(function (data) {
+                $scope.todo = data;
+                $scope.loading = false;   //su dung cho spinner
+            })
+
     }
 
-    $scope.deleteTodo= function(todo){
+    $scope.deleteTodo = function (todo) {
         console.log("Delete Todo: ", todo);
+        $scope.loading = true;   //su dung cho spinner
+
+        svTodos.delete(todo._id)
+            .success(function (data) {
+                $scope.todos = data;
+                $scope.loading = false;   //su dung cho spinner
+            });
     }
-    
+
 }]);
