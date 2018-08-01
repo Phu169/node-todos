@@ -10,7 +10,7 @@ var todoController = require("./api/controllers/todoController");
 var app = express();
 var port = process.env.PORT || 3000;
 
-app.use("/asset", express.static(__dirname + "/public"));
+app.use("/assets", express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
