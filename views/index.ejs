@@ -6,12 +6,15 @@
     <!-- Load cdn style-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-xeditable/0.8.1/css/xeditable.min.css">
 
     <!-- style app-->
     <link rel="stylesheet" href="assets/css/style.css">
 
     <!-- Load cdn scripts-->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-xeditable/0.8.1/js/xeditable.min.js"></script>
+
 
     <!-- Load app-->
     <script src="assets/js/main/app.js"></script>
@@ -23,15 +26,17 @@
     <div class="container">
         <div class="jumbotron text-center">
             <h1>{{ appName }}
-                <span class="label label-info">10</span>
+                <span class="label label-info">{{todos.length}}</span>
             </h1>
         </div>
 
         <div id="todo-list" class="row">
             <div class="col-sm-6 col-sm-offset-3">
                 <div class="checkbox" ng-repeat="todo in todos">
-                    <input type="checkbox" ng-model="todo.isDone">
-                    <span ng-class="{strike: todo.isDone}">{{todo.text}}</span> 
+                    <input type="checkbox" ng-model="todo.isDone" ng-change="updateTodo(todo)">
+                    <a href ng-click="deleteTodo(todo)"><i class="fa fa-remove"></i></a>
+                    <a href ng-click="textBtnForm.$show()" ng-hide="textBtnForm.$visible"><i class="fa fa-edit"></i></a>
+                    <span ng-class="{strike: todo.isDone}" editable-text="todo.text" e-form="textBtnForm" onaftersave="updateTodo(todo)">{{todo.text}}</span> 
                 </div>
             </div>
         </div>
